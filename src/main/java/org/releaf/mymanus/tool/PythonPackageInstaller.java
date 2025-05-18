@@ -26,7 +26,7 @@ public class PythonPackageInstaller implements Tool {
     @Override
     public ToolResult runTool() {
         ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("C:\\Users\\xmin\\.conda\\envs\\lecture-open-manus\\python", "-m", "pip", "install",
+        processBuilder.command("C:\\Users\\fangl\\.conda\\envs\\lecture-open-manus\\python", "-m", "pip", "install",
             packageName);
         try {
             Process process = processBuilder.start();
