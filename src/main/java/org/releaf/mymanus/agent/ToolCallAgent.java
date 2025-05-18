@@ -32,27 +32,27 @@ public class ToolCallAgent extends ReActAgent {
 
     private String prompt;
 
-    private static final String SYSTEM_PROMPR = """
+    private static final String SYSTEM_PROMPT = """
         你是一个全能的 AI 助手，可以解决用户提出的任何任务。你可以调用各种工具来完成各种复杂的请求。
         你可以进行编程，浏览网页，进行网页信息检索，进行处理等等。
         """;
 
     private static final String STEP_PROMPT = """
         你可以使用以下工具与计算机交互：
-        - PythonTool：执行 Python 代码，与计算机系统交互，进行数据处理
-        - FileSaverTool：本地保存文件，例如 txt、py、html 等
-        - SearchTool：执行网页信息检索
+        - HelloTool：使用此工具可以打招呼
         - TerminateTool：使用此工具可以表明已完成请求
         根据用户需求，主动选择最合适的工具或工具组合。对于复杂任务，可以将问题拆解，并逐步使用不同工具来解决。在使用每个工具后，清楚地解释执行结果，并建议下一步行动
         """;
-
+//        - PythonTool：执行 Python 代码，与计算机系统交互，进行数据处理
+//        - FileSaverTool：本地保存文件，例如 txt、py、html 等
+//        - SearchTool：执行网页信息检索
 
     private List<ToolExecutionRequest> requests = new ArrayList<>();
 
     @Override
     public boolean think() {
         if (getCurrentStep() == 1) {
-            getMemory().add(SystemMessage.systemMessage(SYSTEM_PROMPR));
+            getMemory().add(SystemMessage.systemMessage(SYSTEM_PROMPT));
             getMemory().add(UserMessage.from(getPrompt() + "," + STEP_PROMPT));
         } else {
             getMemory().add(UserMessage.from(STEP_PROMPT));
@@ -82,8 +82,9 @@ public class ToolCallAgent extends ReActAgent {
         for (ToolExecutionRequest toolExecutionRequest : requests) {
             log.info("工具：{} 准备执行",toolExecutionRequest.name());
             toolResult = ToolUtil.runTool(toolExecutionRequest);
-            String result = "Observed output of cmd '%s' , executed : %s ".formatted(toolExecutionRequest.name(),
-                toolResult.getResult());
+            String result = "已执行工具 '%s' ,执行状态是：%s 执行结果是 : %s ".formatted(toolExecutionRequest.name(),
+                toolResult.getStatus(),toolResult.getResult());
+            log.info(result);
             getMemory().add(AiMessage.aiMessage(result));
         }
         return toolResult;

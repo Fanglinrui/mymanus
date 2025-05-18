@@ -17,11 +17,13 @@ public abstract class Agent {
 
     public abstract String getPrompt();
 
-    public List<Tool> tools = List.of(new FileSaverTool(),
-            new SearchTool(),
+    public List<Tool> tools = List.of(
+//            new FileSaverTool(),
+//            new SearchTool(),
             new TerminateTool(),
-            new PythonTool(),
-            new PythonPackageInstaller()
+//            new PythonTool(),
+//            new PythonPackageInstaller()
+            new HelloTool()
     );
 
     private int maxSteps = 10;
